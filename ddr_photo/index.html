@@ -191,9 +191,10 @@
       cursor: not-allowed;
     }
 
+
     .result {
       display: none;
-      margin-top: 20px;
+      margin-top: 12px;
       padding: 13px 14px;
       border-radius: 7px;
       white-space: pre-wrap;
@@ -201,18 +202,19 @@
       font-size: 14px;
     }
 
-    .result.success {
-      display: block;
-      background: #10251d;
-      color: #6ee7b7;
-      border: 1px solid #1d5c46;
-    }
-
     .result.error {
-      display: block;
+      margin-top: 0;
+      margin-bottom: 12px;
       background: #2a1518;
       color: #fca5a5;
       border: 1px solid #653037;
+    }
+
+    .result.success {
+      margin-top: 12px;
+      background: #10251d;
+      color: #6ee7b7;
+      border: 1px solid #1d5c46;
     }
 
     .processing-time {
@@ -261,7 +263,7 @@
           type="text"
           id="sheetId"
           name="sheetId"
-          placeholder="Enter Google Sheets URL"
+          placeholder="Enter Google Sheets ID"
           required
         />
 
@@ -286,11 +288,17 @@
         />
       </div>
 
+      
+      <div id="errorResult" class="result error"></div>
+
       <button type="submit" id="submitButton">
         Upload
       </button>
 
       <div id="processingTime" class="processing-time"></div>
+
+      <div id="successResult" class="result success"></div>
+
     </form>
 
     <div id="result" class="result"></div>
@@ -307,7 +315,8 @@
   const filesInput = document.getElementById("files");
   const sheetIdInput = document.getElementById("sheetId");
   const submitButton = document.getElementById("submitButton");
-  const result = document.getElementById("result");
+  const errorResult = document.getElementById("errorResult");
+  const successResult = document.getElementById("successResult");
   const processingTime = document.getElementById("processingTime");
 
   // Restore the previously saved Google Sheets ID.
@@ -366,8 +375,8 @@
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
 
-    result.className = "result";
-    result.textContent = "";
+    successResult.style.display = "none";
+    errorResult.style.display = "none";
 
     const files = Array.from(filesInput.files);
     const sheetId = extractSheetId(sheetIdInput.value.trim());
@@ -469,13 +478,13 @@
   });
 
   function showSuccess(message) {
-    result.className = "result success";
-    result.textContent = message;
+    successResult.textContent = message;
+    successResult.style.display = "block";
   }
 
   function showError(message) {
-    result.className = "result error";
-    result.textContent = message;
+    errorResult.textContent = message;
+    errorResult.style.display = "block";
   }
 </script>
 
